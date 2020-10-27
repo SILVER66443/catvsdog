@@ -33,6 +33,7 @@ img_pass="/home/silver/img_save/cats_img/test/cat_test/cat.10.jpg"
 # model.compile(loss='binary_crossentropy',optimizer=optimizers.RMSprop(lr=1e-4),metrics=['acc'])
 # model.summary()
 
+#网络模型的定义
 input_layer=Input(shape=(150,150,3))
 x=layers.Conv2D(32,(3,3),activation='relu',input_shape=(150,150,3))(input_layer)
 x=layers.MaxPooling2D((2,2))(x)
@@ -49,6 +50,8 @@ output_layer=layers.Dense(1,activation='sigmoid')(x)
 
 model=Model(input_layer,output_layer)
 model.compile(loss='binary_crossentropy',optimizer=optimizers.RMSprop(lr=1e-4),metrics=['acc'])
+
+#数据迭代器预处理数据集
 # data pre
 train_datagen=ImageDataGenerator(
     rescale=1./255,
@@ -72,6 +75,7 @@ val_gennerator=test_datagen.flow_from_directory(
     batch_size=32,
     class_mode='binary')
 
+#训练过程
 # train data
 history=model.fit_generator(
     train_gennerator,
@@ -80,10 +84,12 @@ history=model.fit_generator(
     validation_data=val_gennerator,
     validation_steps=100)
 
+#保存模型
 model.save(model_pass)
 
 #model.load_weights(model_pass)
-#
+
+#全是画图
 # draw a map
 acc=history.history['acc']
 val_acc=history.history['val_acc']
